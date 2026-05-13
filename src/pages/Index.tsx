@@ -143,6 +143,8 @@ export default function Index() {
   const [results, setResults] = useState<Result[]>([]);
   const [quizFinished, setQuizFinished] = useState(false);
   const [lastResult, setLastResult] = useState<Result | null>(null);
+  const [lastAnswers, setLastAnswers] = useState<(number | null)[]>([]);
+  const [showReview, setShowReview] = useState(false);
 
   const finishQuiz = useCallback(
     (finalAnswers: (number | null)[], remainingTime: number) => {
@@ -162,6 +164,8 @@ export default function Index() {
       };
       setResults((prev) => [result, ...prev]);
       setLastResult(result);
+      setLastAnswers(finalAnswers);
+      setShowReview(false);
       setQuizFinished(true);
     },
     [activeQuiz]
@@ -451,7 +455,7 @@ export default function Index() {
                   ))}
                 </div>
 
-                <div className="flex gap-3 justify-center">
+                <div className="flex gap-3 justify-center mb-8">
                   <button
                     onClick={() => startQuiz(activeQuiz)}
                     className="flex items-center gap-2 bg-foreground text-background px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-80 transition-opacity"
@@ -467,6 +471,51 @@ export default function Index() {
                     Другой тест
                   </button>
                 </div>
+
+                <button
+                  onClick={() => setShowReview((v) => !v)}
+                  className="flex items-center gap-2 mx-auto text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-6"
+                >
+                  <Icon name={showReview ? "ChevronUp" : "ChevronDown"} size={16} />
+                  {showReview ? "Скрыть разбор" : "Показать разбор ошибок"}
+                </button>
+
+                {showReview && (
+                  <div className="text-left space-y-4 animate-fade-in">
+                    {activeQuiz.questions.map((q, i) => {
+                      const userAnswer = lastAnswers[i];
+                      const isCorrect = userAnswer === q.correct;
+                      return (
+                        <div
+                          key={q.id}
+                          className={`rounded-xl border-2 p-5 ${isCorrect ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}
+                        >
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5 ${isCorrect ? "bg-green-500" : "bg-red-500"}`}>
+                              <Icon name={isCorrect ? "Check" : "X"} size={13} className="text-white" />
+                            </div>
+                            <p className="font-medium text-foreground text-sm">{q.text}</p>
+                          </div>
+                          <div className="ml-9 space-y-1.5">
+                            {!isCorrect && userAnswer !== null && (
+                              <div className="flex items-center gap-2 text-sm text-red-600">
+                                <span className="font-semibold">Ваш ответ:</span>
+                                <span>{q.options[userAnswer]}</span>
+                              </div>
+                            )}
+                            {!isCorrect && userAnswer === null && (
+                              <div className="text-sm text-red-500 italic">Ответ не выбран</div>
+                            )}
+                            <div className="flex items-center gap-2 text-sm text-green-700">
+                              <span className="font-semibold">Правильно:</span>
+                              <span>{q.options[q.correct]}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )
           )}
