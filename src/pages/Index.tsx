@@ -265,8 +265,8 @@ export default function Index() {
 
           <div className="grid grid-cols-3 gap-4 mt-20">
             {[
-              { label: "Тестов доступно", value: "3", icon: "BookOpen" },
-              { label: "Вопросов в среднем", value: "5", icon: "HelpCircle" },
+              { label: "Тестов доступно", value: "5", icon: "BookOpen" },
+              { label: "Вопросов в каждом", value: "10", icon: "HelpCircle" },
               { label: "Пройдено тестов", value: String(results.length), icon: "CheckCircle" },
             ].map((s) => (
               <div key={s.label} className="bg-card border border-border rounded-2xl p-6 animate-fade-in">
