@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1778663026660001051.html"
 	],
 	prefix: "",
 	theme: {
@@ -16,6 +17,10 @@ export default {
 			screens: {
 				'2xl': '1400px'
 			}
+		},
+		fontFamily: {
+			sans: ['"Golos Text"', 'sans-serif'],
+			display: ['Cormorant', 'serif'],
 		},
 		extend: {
 			colors: {
@@ -86,9 +91,26 @@ export default {
 					}
 				}
 			},
+			keyframes: {
+				'fade-in': {
+					from: { opacity: '0', transform: 'translateY(12px)' },
+					to: { opacity: '1', transform: 'translateY(0)' }
+				},
+				'scale-in': {
+					from: { opacity: '0', transform: 'scale(0.95)' },
+					to: { opacity: '1', transform: 'scale(1)' }
+				},
+				'timer-pulse': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.4' }
+				}
+			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.4s ease-out',
+				'scale-in': 'scale-in 0.25s ease-out',
+				'timer-pulse': 'timer-pulse 1s ease-in-out infinite'
 			}
 		}
 	},
